@@ -21,7 +21,7 @@ node {
     }
 
     stage('Test') {
-        parallel {
+        parallel(
             test: {
                 docker.image('buildtools-build-tools').inside(base_inside) {
                     sh 'rake test'
@@ -40,7 +40,7 @@ node {
                 }
                 step([$class: 'PmdPublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''])
             }
-        }
+        )
     }
 
     stage('Deploy') {
