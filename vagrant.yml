@@ -4,5 +4,6 @@
     - rfhayashi.docker-vagrant
     - rfhayashi.ansible-container
   tasks:
+    - include: buildtools/ansible/terraform.yml
     - name: installs openjdk
       yum: name=java-1.8.0-openjdk-devel

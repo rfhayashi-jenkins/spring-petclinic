@@ -1,0 +1,9 @@
+---
+- hosts: web
+  tasks:
+    - include: jdk.yml
+    - name: create app dir
+      file: path=/app state=directory
+    - name: copy jar file
+      copy:
+        src: "../../../target/springboot-petclinic-1.4.2.war dest=/app/petclinics.war"

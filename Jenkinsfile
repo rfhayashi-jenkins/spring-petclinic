@@ -16,4 +16,6 @@ node {
     docker.image('buildtools-build-tools').inside(base_inside) {
         sh 'rake build'
     }
+
+    sh 'rake build_docker'
 }

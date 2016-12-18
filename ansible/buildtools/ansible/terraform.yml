@@ -1,0 +1,11 @@
+- name: installs unzip
+  yum: name=unzip
+- name: downloads terraform
+  get_url:
+    url: https://releases.hashicorp.com/terraform/0.8.1/terraform_0.8.1_linux_amd64.zip
+    dest: /tmp/terraform_0.8.1_linux_amd64.zip
+- name: extract terraform
+  unarchive:
+    src: /tmp/terraform_0.8.1_linux_amd64.zip
+    dest: /usr/bin
+    copy: no
