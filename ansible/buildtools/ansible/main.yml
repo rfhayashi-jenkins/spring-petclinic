@@ -4,7 +4,6 @@
     - rfhayashi.rake
   tasks:
     - include: jdk.yml
-    - include: terraform.yml
     - name: installs which
       yum: name=which
     - name: Purge yum cache
