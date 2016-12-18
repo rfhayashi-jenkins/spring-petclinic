@@ -1,4 +1,4 @@
-- hosts: all
+- hosts: default
   vars:
     docker_users:
       - ec2-user
