@@ -1,4 +1,9 @@
 node {
+    stage: Checkout
+
     checkout scm
-    sh './mvnw package'
+
+    stage: Build Tools
+
+    sh 'rake build_tools'
 }

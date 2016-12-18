@@ -1,0 +1,6 @@
+---
+- hosts: build-tools
+  gather_facts: false
+  roles:
+    - rfhayashi.rake
+    - rfhayashi.openjdk
