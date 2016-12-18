@@ -6,7 +6,7 @@ task :build do
   sh './mvnw package -DskipTests=true'
 end
 
-task test do
+task :test do
   sh './mvnw test'
 end
 
