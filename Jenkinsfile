@@ -1,6 +1,7 @@
 #!groovy
 
 def base_inside = "-v ${env.JENKINS_HOME}:/home/jenkins -e HOME=/home/jenkins -e JAVA_HOME=/"
+def vagrant_inside = "-v ${env.JENKINS_HOME}:/vagrant -e HOME=/vagrant"
 
 node {
     stage('Checkout') {
@@ -33,7 +34,7 @@ node {
 
     try {
         stage('Deploy') {
-            docker.image('buildtools-build-tools').inside {
+            docker.image('buildtools-build-tools').inside(vagrant_inside) {
                 withCredentials([file(credentialsId: 'petclinic_aws_config', variable: 'AWS_CONFIG_FILE')]) {
                     withCredentials([file(credentialsId: 'petclinic_aws_pk', variable: 'AWS_PRIVATE_KEY_FILE')]) {
                         sh 'rake deploy'
@@ -42,7 +43,7 @@ node {
             }
         }
     } finally {
-        docker.image('buildtools-build-tools').inside {
+        docker.image('buildtools-build-tools').inside(vagrant_inside) {
             sh 'rake undeploy'
         }
     }
