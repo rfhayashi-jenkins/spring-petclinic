@@ -1,4 +1,4 @@
 node {
-    git checkout
+    scm checkout
     sh './mvnw package'
 }
