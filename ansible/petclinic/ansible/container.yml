@@ -1,7 +1,7 @@
 version: "1"
 services:
   web:
-    image: "centos:centos7"
+    image: "openjdk:8"
     ports:
       - "9090:8080"
     command: ["java", "-jar", "/app/petclinic.war"]
