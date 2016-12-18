@@ -44,7 +44,11 @@ node {
         }
     } finally {
         docker.image('buildtools-build-tools').inside(vagrant_inside) {
-            sh 'rake undeploy'
+            withCredentials([file(credentialsId: 'petclinic_aws_config', variable: 'AWS_CONFIG_FILE')]) {
+                withCredentials([file(credentialsId: 'petclinic_aws_pk', variable: 'AWS_PRIVATE_KEY_FILE')]) {
+                    sh 'rake undeploy'
+                }
+            }
         }
     }
 }

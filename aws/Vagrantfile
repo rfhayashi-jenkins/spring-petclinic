@@ -10,7 +10,7 @@ Vagrant.configure('2') do |config|
     aws.access_key_id = conf['access_key_id']
     aws.secret_access_key = conf['secret_access_key']
     aws.keypair_name = conf['keypair_name']
-    aws.instance_type = conf['instance_type'] || 't2.medium'
+    aws.instance_type = conf['instance_type'] || 't2.small'
     aws.subnet_id = conf['subnet_id']
     aws.security_groups = conf['security_groups']
 
