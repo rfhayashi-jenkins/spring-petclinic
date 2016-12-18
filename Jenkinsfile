@@ -15,7 +15,7 @@ node {
         docker.image('buildtools-build-tools').inside(base_inside) {
             sh 'rake build'
         }
-buildtools-build-tools
+
         sh 'rake docker_build'
 
         withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
