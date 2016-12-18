@@ -7,6 +7,8 @@
     - include: jdk.yml
     - name: installs which
       yum: name=which
+    - name: installs ssh
+      yum: name=openssh-clients
     - name: installs rsync
       yum: name=rsync
     - name: Purge yum cache
