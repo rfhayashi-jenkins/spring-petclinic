@@ -3,6 +3,6 @@ services:
   web:
     image: "centos:centos7"
     ports:
-      - "8080:8080"
+      - "9090:8080"
     command: ["java", "-jar", "/app/petclinic.war"]
 registries: {}
