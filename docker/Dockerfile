@@ -4,7 +4,7 @@ RUN useradd petclinic
 
 RUN mkdir /app
 
-COPY petclinic.war /app/petclinic.war
+COPY petclinic.jar /app/petclinic.jar
 
 RUN chown -R petclinic:petclinic /app
 
@@ -12,4 +12,4 @@ USER petclinic
 
 WORKDIR /app
 
-ENTRYPOINT ["java", "-jar", "petclinic.war"]
+ENTRYPOINT ["java", "-jar", "petclinic.jar"]
