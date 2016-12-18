@@ -7,5 +7,7 @@
     - include: jdk.yml
     - name: installs which
       yum: name=which
+    - name: installs rsync
+      yum: name=rsync
     - name: Purge yum cache
       command: yum clean all
