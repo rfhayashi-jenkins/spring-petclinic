@@ -16,7 +16,11 @@ node {
             sh 'rake build'
         }
 
-        sh 'rake build_docker'
+        sh 'rake docker_build'
+
+        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+            sh 'rake docker_push'
+        }
     }
 
     stage('Test') {

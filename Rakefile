@@ -14,12 +14,12 @@ task :pmd do
   sh './mvnw pmd:pmd'
 end
 
-task :build_docker do
+task :docker_build do
   sh 'cp target/springboot-petclinic-1.4.2.jar docker/petclinic.jar'
   sh 'docker build -t rfhayashi/petclinic docker'
 end
 
-task :push_docker do
+task :docker_push do
   sh 'docker login -u $USERNAME -p $PASSWORD'
   sh 'docker push rfhayashi/petclinic docker'
 end
