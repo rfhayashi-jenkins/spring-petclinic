@@ -17,7 +17,5 @@ node {
         sh 'rake build'
     }
 
-    sh 'ls -l target'
-
     sh 'rake build_docker'
 }
