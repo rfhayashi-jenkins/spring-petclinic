@@ -1,8 +1,0 @@
-version: "1"
-services:
-  web:
-    image: "openjdk:8"
-    ports:
-      - "9090:8080"
-    command: ["java", "-jar", "/app/petclinic.war"]
-registries: {}

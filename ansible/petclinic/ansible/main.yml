@@ -1,9 +1,0 @@
----
-- hosts: web
-  tasks:
-    - name: create app dir
-      file: path=/app state=directory
-    - name: copy jar file
-      copy:
-        src: "petclinic.war"
-        dest: /app/petclinic.war

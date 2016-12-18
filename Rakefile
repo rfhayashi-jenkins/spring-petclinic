@@ -7,10 +7,10 @@ task :build do
 end
 
 task :build_docker do
-  sh 'cp target/springboot-petclinic-1.4.2.jar ansible/petclinic/ansible/petclinic.jar'
-  sh '(cd ansible/petclinic; ansible-container build --from-scratch)'
+  sh 'cp target/springboot-petclinic-1.4.2.jar docker/petclinic.jar'
+  sh 'docker build -t petclinic docker'
 end
 
 task :run_docker => :build_docker do
-  sh '(cd ansible/petclinic; ansible-container run)'
+  sh 'docker run -d -p 8080:8080 petclinic'
 end
