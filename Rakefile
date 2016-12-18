@@ -3,7 +3,11 @@ task :build_tools do
 end
 
 task :build do
-  sh './mvnw package'
+  sh './mvnw package -DskipTests=true'
+end
+
+task test do
+  sh './mvnw test'
 end
 
 task :checkstyle do

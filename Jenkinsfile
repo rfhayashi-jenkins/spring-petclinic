@@ -18,22 +18,35 @@ node {
         }
 
         sh 'rake docker_build'
-
-        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-            sh 'rake docker_push'
-        }
     }
 
     stage('Test') {
-        sh 'rake checkstyle'
-        step([$class: 'CheckStylePublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''])
-
-        sh 'rake pmd'
-        step([$class: 'PmdPublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''])
+        parallel {
+            test: {
+                docker.image('buildtools-build-tools').inside(base_inside) {
+                    sh 'rake test'
+                }
+                junit 'target/surefire-reports/*.xml'
+            },
+            checkstyle: {
+                docker.image('buildtools-build-tools').inside(base_inside) {
+                    sh 'rake checkstyle'
+                }
+                step([$class: 'CheckStylePublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''])
+            },
+            pmd: {
+                docker.image('buildtools-build-tools').inside(base_inside) {
+                    sh 'rake pmd'
+                }
+                step([$class: 'PmdPublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''])
+            }
+        }
     }
 
     stage('Deploy') {
-        println currentBuild.result
+        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+            sh 'rake docker_push'
+        }
 
         docker.image('buildtools-build-tools').inside(vagrant_inside) {
             withCredentials([file(credentialsId: 'petclinic_aws_config', variable: 'AWS_CONFIG_FILE')]) {
