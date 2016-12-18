@@ -33,6 +33,8 @@ node {
     }
 
     stage('Deploy') {
+        println currentBuild.result
+
         if (currentBuild.result == 'SUCCESS') {
             docker.image('buildtools-build-tools').inside(vagrant_inside) {
                 withCredentials([file(credentialsId: 'petclinic_aws_config', variable: 'AWS_CONFIG_FILE')]) {
@@ -53,7 +55,9 @@ node {
 
 stage('Approval') {
     try {
-        input "Test new petclinic version"
+        if (currentBuild.result == 'SUCCESS') {
+            input "Test new petclinic version"
+        }
     } finally {
         node {
             checkout scm
