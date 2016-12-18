@@ -2,12 +2,14 @@ FROM openjdk:8
 
 RUN useradd petclinic
 
-USER petclinic
-
 RUN mkdir /app
 
-WORKDIR /app
-
 COPY petclinic.war /app/petclinic.war
+
+RUN chown -R petclinic:petclinic /app
+
+USER petclinic
+
+WORKDIR /app
 
 ENTRYPOINT ["java", "-jar", "petclinic.war"]
