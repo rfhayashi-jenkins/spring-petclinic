@@ -5,6 +5,10 @@
     - rfhayashi.vagrant
   tasks:
     - include: jdk.yml
+    - name: installs epel
+      yum: name=epel-release
+    - name: installs ansible
+      yum: name=ansible
     - name: installs which
       yum: name=which
     - name: installs ssh
