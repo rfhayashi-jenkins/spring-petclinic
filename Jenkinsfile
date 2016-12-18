@@ -1,9 +1,9 @@
 node {
-    stage: Checkout
+    stage: 'Checkout'
 
     checkout scm
 
-    stage: Build Tools
+    stage: 'Build Tools'
 
     sh 'rake build_tools'
 }
