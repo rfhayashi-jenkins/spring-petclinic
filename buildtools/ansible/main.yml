@@ -3,3 +3,8 @@
   roles:
     - rfhayashi.rake
     - rfhayashi.openjdk
+  tasks:
+    - name: installs which
+      yum: name=which
+    - name: Purge yum cache
+      command: yum clean all
