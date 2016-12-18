@@ -1,6 +1,8 @@
 - hosts: all
   roles:
     - rfhayashi.rake
-    - rfhayashi.openjdk
     - rfhayashi.docker-vagrant
     - rfhayashi.ansible-container
+  tasks:
+    - name: installs openjdk
+      yum: name=java-1.8.0-openjdk-devel
