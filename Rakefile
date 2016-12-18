@@ -27,3 +27,13 @@ end
 task :run_docker => :build_docker do
   sh 'docker run -d -p 8080:8080 petclinic'
 end
+
+task :deploy do
+  sh 'vagrant plugin install vagrant-aws'
+  sh '(cd aws; vagrant up --provider=aws)'
+  sh '(cd aws; vagrant ssh -c "docker run -d -p 8080:8080 rfhayashi/petclinic")'
+end
+
+task :undeploy do
+  sh '(cd aws; vagrant destroy)'
+end

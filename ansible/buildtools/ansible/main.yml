@@ -2,6 +2,7 @@
 - hosts: build-tools
   roles:
     - rfhayashi.rake
+    - rfhayashi.vagrant
   tasks:
     - include: jdk.yml
     - name: installs which

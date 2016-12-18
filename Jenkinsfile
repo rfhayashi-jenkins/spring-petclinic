@@ -15,7 +15,7 @@ node {
         docker.image('buildtools-build-tools').inside(base_inside) {
             sh 'rake build'
         }
-
+buildtools-build-tools
         sh 'rake docker_build'
 
         withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
@@ -29,5 +29,21 @@ node {
 
         sh 'rake pmd'
         step([$class: 'PmdPublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''])
+    }
+
+    try {
+        stage('Deploy') {
+            docker.image('buildtools-build-tools').inside {
+                withCredentials([file(credentialsId: 'petclinic_aws_config', variable: 'AWS_CONFIG_FILE')]) {
+                    withCredentials([file(credentialsId: 'petclinic_aws_pk', variable: 'AWS_PRIVATE_KEY_FILE')]) {
+                        sh 'rake deploy'
+                    }
+                }
+            }
+        }
+    } finally {
+        docker.image('buildtools-build-tools').inside {
+            sh 'rake undeploy'
+        }
     }
 }
