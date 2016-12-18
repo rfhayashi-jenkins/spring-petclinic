@@ -20,10 +20,10 @@ node {
     }
 
     stage('Test') {
-        sh './mvnm checkstyle:checkstyle'
+        sh 'rake checkstyle'
         step([$class: 'CheckStylePublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''])
 
-        sh './mvnm pmd:pmd'
+        sh 'rake pmd'
         step([$class: 'PmdPublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''])
     }
 }
