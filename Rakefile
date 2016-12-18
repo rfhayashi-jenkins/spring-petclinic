@@ -35,5 +35,5 @@ task :deploy do
 end
 
 task :undeploy do
-  sh '(cd aws; vagrant destroy)'
+  sh '(cd aws; vagrant destroy --force)'
 end
