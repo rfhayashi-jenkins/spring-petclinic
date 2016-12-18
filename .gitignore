@@ -8,3 +8,4 @@ target/*
 _site/
 roles
 .vagrant
+ansible/petclinic/ansible/petclinic.war
