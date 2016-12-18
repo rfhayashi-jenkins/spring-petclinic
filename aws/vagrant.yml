@@ -1,0 +1,17 @@
+- hosts: all
+  vars:
+    docker_users:
+      - ec2-user
+  handlers:
+    - name: restart docker
+      service: name=docker state=restarted
+  tasks:
+    - name: installs docker engine
+      yum: name=docker update_cache=yes
+      notify:
+        - restart docker
+    - name: add users to docker group
+      user: name={{ item }} groups=docker append=yes
+      with_items: '{{ docker_users }}'
+      notify:
+        - restart docker
