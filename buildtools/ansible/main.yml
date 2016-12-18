@@ -2,8 +2,9 @@
 - hosts: build-tools
   roles:
     - rfhayashi.rake
-    - rfhayashi.openjdk
   tasks:
+    - name: installs openjdk
+      yum: name=java-1.8.0-openjdk-devel
     - name: installs which
       yum: name=which
     - name: Purge yum cache
