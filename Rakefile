@@ -21,7 +21,7 @@ end
 
 task :docker_push do
   sh 'docker login -u $USERNAME -p $PASSWORD'
-  sh 'docker push rfhayashi/petclinic docker'
+  sh 'docker push rfhayashi/petclinic'
 end
 
 task :run_docker => :build_docker do
