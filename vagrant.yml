@@ -1,0 +1,6 @@
+- hosts: all
+  roles:
+    - rfhayashi.rake
+    - rfhayashi.openjdk
+    - rfhayashi.docker-vagrant
+    - rfhayashi.ansible-container

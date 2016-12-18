@@ -1,0 +1,11 @@
+- src: rfhayashi.rake
+  version: '0.1'
+
+- src: rfhayashi.openjdk
+  version: '0.1'
+
+- src: rfhayashi.docker-vagrant
+  version: '0.1'
+
+- src: rfhayashi.ansible-container
+  version: '0.1'
