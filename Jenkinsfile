@@ -18,4 +18,12 @@ node {
 
         sh 'rake build_docker'
     }
+
+    stage('Test') {
+        sh './mvnm checkstyle:checkstyle'
+        step([$class: 'CheckStylePublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''])
+
+        sh './mvnm pmd:pmd'
+        step([$class: 'PmdPublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''])
+    }
 }
