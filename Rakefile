@@ -1,5 +1,5 @@
 task :build_tools do
-  sh '(cd ansible/buildtools; ansible-container build --from-scratch)'
+  sh '(cd buildtools; ansible-container build --from-scratch)'
 end
 
 task :build do
