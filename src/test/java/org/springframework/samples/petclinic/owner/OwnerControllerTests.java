@@ -58,8 +58,6 @@ public class OwnerControllerTests {
 
     @Test
     public void testProcessCreationFormSuccess() throws Exception {
-        if (true) throw new RuntimeException();
-
         mockMvc.perform(post("/owners/new")
             .param("firstName", "Joe")
             .param("lastName", "Bloggs")
