@@ -53,6 +53,10 @@ node {
                 withCredentials([file(credentialsId: 'petclinic_aws_pk', variable: 'AWS_PRIVATE_KEY_FILE')]) {
                     try {
                         sh 'rake deploy'
+
+                        sh 'rake public_ip > public_ip'
+                        def output = readFile('public_ip')
+                        echo output
                     } catch (e) {
                         sh 'rake undeploy'
                         throw e

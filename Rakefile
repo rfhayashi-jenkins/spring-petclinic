@@ -41,3 +41,7 @@ end
 task :undeploy do
   sh '(cd aws; vagrant destroy --force)'
 end
+
+task :public_ip do
+  sh '(cd aws; vagrant ssh -c "curl http://169.254.169.254/latest/meta-data/local-ipv4")'
+end
