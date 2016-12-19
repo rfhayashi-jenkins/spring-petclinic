@@ -43,5 +43,5 @@ task :undeploy do
 end
 
 task :public_ip do
-  sh '(cd aws; vagrant ssh -c "curl http://169.254.169.254/latest/meta-data/local-ipv4")'
+  sh '(cd aws; vagrant ssh -c "curl http://169.254.169.254/latest/meta-data/public-ipv4")'
 end

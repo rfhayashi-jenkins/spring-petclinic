@@ -2,6 +2,7 @@
 
 def base_inside = "-v ${env.JENKINS_HOME}:/home/jenkins -e HOME=/home/jenkins -e JAVA_HOME=/"
 def vagrant_inside = "-u root:root -v ${env.JENKINS_HOME}:/vagrant -e HOME=/vagrant"
+def url
 
 node {
     stage('Checkout') {
@@ -55,8 +56,10 @@ node {
                         sh 'rake deploy'
 
                         sh 'rake public_ip > public_ip'
-                        def output = readFile('public_ip')
-                        echo output
+                        public_ip = readFile('public_ip')
+                        url = "http://${public_ip}:8080"
+
+                        echo "New petclinic version available for test at: ${url}"
                     } catch (e) {
                         sh 'rake undeploy'
                         throw e
@@ -69,7 +72,7 @@ node {
 
 stage('Approval') {
     try {
-        input "Test new petclinic version"
+        input "Test new petclinic version at ${url}"
     } finally {
         node {
             checkout scm
