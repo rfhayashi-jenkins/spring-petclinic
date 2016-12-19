@@ -18,6 +18,10 @@ Vagrant.configure('2') do |config|
 
     aws.ami = conf['ami'] || 'ami-b73b63a0'
 
+    aws.tags = {
+        'Name' => 'Spring-Petclinic'
+    }
+
     override.ssh.username = conf['username'] || 'ec2-user'
     override.ssh.private_key_path = conf['private_key_path'] || ENV['AWS_PRIVATE_KEY_FILE']
   end
