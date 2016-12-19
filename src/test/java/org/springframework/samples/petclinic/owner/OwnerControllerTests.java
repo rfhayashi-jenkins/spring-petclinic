@@ -50,8 +50,6 @@ public class OwnerControllerTests {
 
     @Test
     public void testInitCreationForm() throws Exception {
-        if (true) throw new RuntimeException();
-
         mockMvc.perform(get("/owners/new"))
             .andExpect(status().isOk())
             .andExpect(model().attributeExists("owner"))
@@ -60,6 +58,8 @@ public class OwnerControllerTests {
 
     @Test
     public void testProcessCreationFormSuccess() throws Exception {
+        if (true) throw new RuntimeException();
+
         mockMvc.perform(post("/owners/new")
             .param("firstName", "Joe")
             .param("lastName", "Bloggs")
