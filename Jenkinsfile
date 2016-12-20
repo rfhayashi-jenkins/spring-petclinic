@@ -87,7 +87,12 @@ stage('Integration Test') {
         node {
             git url: 'https://github.com/rfhayashi/spring-petclinic-tests.git'
 
-            sleep 5 // waits the application spins up
+            timeout(240) {
+                waitUntil {
+                    def r = sh script: "wget -q ${url} -O /dev/null", returnStatus: true
+                    return (r == 0);
+                }
+            }
 
             runOnBuildTools {
                 sh "(cd selenium; ./gradlew -Dbase.url=${url} -DbrowserType=htmlunit test)"
