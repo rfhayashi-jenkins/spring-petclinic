@@ -1,7 +1,7 @@
 #!groovy
 
-def base_inside = "-v ${env.JENKINS_HOME}:/home/jenkins -e HOME=/home/jenkins"
-def vagrant_inside = "-u root:root -v ${env.JENKINS_HOME}:/vagrant -e HOME=/vagrant"
+base_inside = "-v ${env.JENKINS_HOME}:/home/jenkins -e HOME=/home/jenkins"
+vagrant_inside = "-u root:root -v ${env.JENKINS_HOME}:/vagrant -e HOME=/vagrant"
 def url
 
 def runOnBuildTools(code) {
