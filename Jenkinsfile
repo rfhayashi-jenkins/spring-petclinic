@@ -84,9 +84,9 @@ node {
 
 stage('Integration Test') {
     node {
-        git url: 'git@github.com:rfhayashi/spring-petclinic-tests.git'
-
         try {
+            git url: 'https://github.com/rfhayashi/spring-petclinic-tests.git'
+
             sleep 5 // waits the application spins up
 
             runOnBuildTools {
