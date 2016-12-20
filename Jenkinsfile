@@ -4,13 +4,13 @@ def base_inside = "-v ${env.JENKINS_HOME}:/home/jenkins -e HOME=/home/jenkins"
 def vagrant_inside = "-u root:root -v ${env.JENKINS_HOME}:/vagrant -e HOME=/vagrant"
 def url
 
-def runOnBuildTools = { code ->
+def runOnBuildTools(code) {
     docker.image('buildtools-build-tools').inside(base_inside) {
         code.call()
     }
 }
 
-def runOnVagrant = { code ->
+def runOnVagrant(code) {
     docker.image('buildtools-build-tools').inside(vagrant_inside) {
         withCredentials([file(credentialsId: 'petclinic_aws_config', variable: 'AWS_CONFIG_FILE')]) {
             withCredentials([file(credentialsId: 'petclinic_aws_pk', variable: 'AWS_PRIVATE_KEY_FILE')]) {
