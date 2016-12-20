@@ -1,8 +1,24 @@
 #!groovy
 
-def base_inside = "-v ${env.JENKINS_HOME}:/home/jenkins -e HOME=/home/jenkins -e JAVA_HOME=/"
+def base_inside = "-v ${env.JENKINS_HOME}:/home/jenkins -e HOME=/home/jenkins"
 def vagrant_inside = "-u root:root -v ${env.JENKINS_HOME}:/vagrant -e HOME=/vagrant"
 def url
+
+def runOnBuildTools = { code ->
+    docker.image('buildtools-build-tools').inside(base_inside) {
+        code.call()
+    }
+}
+
+def runOnVagrant = { code ->
+    docker.image('buildtools-build-tools').inside(vagrant_inside) {
+        withCredentials([file(credentialsId: 'petclinic_aws_config', variable: 'AWS_CONFIG_FILE')]) {
+            withCredentials([file(credentialsId: 'petclinic_aws_pk', variable: 'AWS_PRIVATE_KEY_FILE')]) {
+                code.call()
+            }
+        }
+    }
+}
 
 node {
     stage('Checkout') {
@@ -14,7 +30,7 @@ node {
     }
 
     stage('Build') {
-        docker.image('buildtools-build-tools').inside(base_inside) {
+        runOnBuildTools {
             sh 'rake build'
         }
 
@@ -24,19 +40,19 @@ node {
     stage('Test') {
         parallel(
             test: {
-                docker.image('buildtools-build-tools').inside(base_inside) {
+                runOnBuildTools {
                     sh 'rake test'
                 }
                 junit 'target/surefire-reports/*.xml'
             },
             checkstyle: {
-                docker.image('buildtools-build-tools').inside(base_inside) {
+                runOnBuildTools {
                     sh 'rake checkstyle'
                 }
                 step([$class: 'CheckStylePublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''])
             },
             pmd: {
-                docker.image('buildtools-build-tools').inside(base_inside) {
+                runOnBuildTools {
                     sh 'rake pmd'
                 }
                 step([$class: 'PmdPublisher', canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''])
@@ -49,24 +65,40 @@ node {
             sh 'rake docker_push'
         }
 
-        docker.image('buildtools-build-tools').inside(vagrant_inside) {
-            withCredentials([file(credentialsId: 'petclinic_aws_config', variable: 'AWS_CONFIG_FILE')]) {
-                withCredentials([file(credentialsId: 'petclinic_aws_pk', variable: 'AWS_PRIVATE_KEY_FILE')]) {
-                    try {
-                        sh 'rake deploy'
+        runOnVagrant {
+            try {
+                sh 'rake deploy'
 
-                        sh 'rake public_ip > public_ip'
-                        public_ip = readFile('public_ip')
-                        url = "http://${public_ip}:8080"
+                sh 'rake public_ip > public_ip'
+                public_ip = readFile('public_ip')
+                url = "http://${public_ip}:8080"
 
-                        echo "New petclinic version available for test at: ${url}"
-                    } catch (e) {
-                        sh 'rake undeploy'
-                        throw e
-                    }
-                }
+                echo "New petclinic version available for test at: ${url}"
+            } catch (e) {
+                sh 'rake undeploy'
+                throw e
             }
         }
+    }
+}
+
+stage('Integration Test') {
+    node {
+        git url: 'git@github.com:rfhayashi/spring-petclinic-tests.git'
+
+        try {
+            sleep 5 // waits the application spins up
+
+            runOnBuildTools {
+                sh "./gradlew -Dbase.url=${url} -DbrowserType=htmlunit test"
+            }
+        } catch (e) {
+            runOnVagrant {
+                sh 'rake undeploy'
+            }
+            throw e
+        }
+
     }
 }
 
