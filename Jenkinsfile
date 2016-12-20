@@ -83,22 +83,25 @@ node {
 }
 
 stage('Integration Test') {
-    node {
-        try {
+    try {
+        node {
             git url: 'https://github.com/rfhayashi/spring-petclinic-tests.git'
 
             sleep 5 // waits the application spins up
 
             runOnBuildTools {
-                sh "./gradlew -Dbase.url=${url} -DbrowserType=htmlunit test"
+                sh "(cd selenium; ./gradlew -Dbase.url=${url} -DbrowserType=htmlunit test)"
             }
-        } catch (e) {
+        }
+    } catch (e) {
+        node {
+            checkout scm
+
             runOnVagrant {
                 sh 'rake undeploy'
             }
-            throw e
         }
-
+        throw e
     }
 }
 
@@ -109,12 +112,8 @@ stage('Approval') {
         node {
             checkout scm
 
-            docker.image('buildtools-build-tools').inside(vagrant_inside) {
-                withCredentials([file(credentialsId: 'petclinic_aws_config', variable: 'AWS_CONFIG_FILE')]) {
-                    withCredentials([file(credentialsId: 'petclinic_aws_pk', variable: 'AWS_PRIVATE_KEY_FILE')]) {
-                        sh 'rake undeploy'
-                    }
-                }
+            runOnVagrant {
+                sh 'rake undeploy'
             }
         }
     }
